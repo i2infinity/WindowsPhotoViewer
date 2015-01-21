@@ -11,23 +11,28 @@ namespace WindowsPhotoViewer
 {
     public static class Xtensions
     {
-        public static IList<ImageItem> MapToImageItem(this IEnumerable<Photo> storePhotos)
+        public static IList<Photo> MapToStorePhoto(this IEnumerable<StorageFile> storePhotos)
         {
-            var result = new List<ImageItem>();
-            var photos = storePhotos as IList<Photo> ?? storePhotos.ToList();
+            var result = new List<Photo>();
+            var photos = storePhotos as IList<StorageFile> ?? storePhotos.ToList();
 
             if (storePhotos == null || !photos.Any())
             {
                 return result;
             }
 
-            result.AddRange(from storePhoto in photos
-                let uri = new Uri(storePhoto.FilePath)
-                let bitmapImage = new BitmapImage(uri) {DecodePixelWidth = 200}
-                select new ImageItem
+            foreach (var storePhoto in photos)
+            {
+                var imageItem = new Photo
                 {
-                    DisplayName = storePhoto.DisplayName, FileName = storePhoto.FileName, FilePath = storePhoto.FilePath, ImageSource = bitmapImage,
-                });
+                    DisplayName = storePhoto.DisplayName,
+                    FileName = storePhoto.Name,
+                    FilePath = storePhoto.Path,
+                    StorageFile = storePhoto
+                };
+
+                result.Add(imageItem);
+            }
 
             return result;
         }

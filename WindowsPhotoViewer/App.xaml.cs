@@ -45,11 +45,9 @@ namespace WindowsPhotoViewer
             // just ensure that the window is active
             if (rootFrame == null)
             {
-                // Create a Frame to act as the navigation context and navigate to the first page
                 rootFrame = new Frame();
-                // Set the default language
+                Common.SuspensionManager.RegisterFrame(rootFrame, "appFrame");
                 rootFrame.Language = Windows.Globalization.ApplicationLanguages.Languages[0];
-
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)

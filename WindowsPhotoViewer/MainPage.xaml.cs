@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Windows.Graphics.Display;
+using Windows.Storage;
 using Windows.UI.Popups;
 using WindowsPhotoViewer.Common;
 using System;
@@ -20,6 +21,8 @@ namespace WindowsPhotoViewer
         private readonly IRetrievePhotos photoLoader = new PhotoLoaderSDK.PhotoLoader();
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
+        private IList<String> recentlyAccessedPhotos;
+        private const String RecentlyAccessedPhotosTokenName = "falToken";
 
         /// <summary>
         /// This can be changed to a strongly typed view model.
@@ -60,8 +63,37 @@ namespace WindowsPhotoViewer
         /// <see cref="Frame.Navigate(Type, Object)"/> when this page was initially requested and
         /// a dictionary of state preserved by this page during an earlier
         /// session. The state will be null the first time a page is visited.</param>
-        private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
+        private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
+            try
+            {
+                if (e.PageState == null || !e.PageState.ContainsKey(RecentlyAccessedPhotosTokenName)) return;
+
+                Object value;
+                if (!e.PageState.TryGetValue(RecentlyAccessedPhotosTokenName, out value)) return;
+
+                recentlyAccessedPhotos = value as List<String>;
+                if (recentlyAccessedPhotos == null)
+                {
+                    return;
+                }
+
+                var photos = new List<StorageFile>();
+                foreach (var accessedPhoto in recentlyAccessedPhotos)
+                {
+                    try
+                    {
+                        var file = await Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.GetFileAsync(accessedPhoto);
+                        photos.Add(file);
+                    }
+                    catch{}
+                }
+
+                ImagesGrid.ItemsSource = new LazyPhotoLoader(photos.MapToStorePhoto());
+                selectedCount.Text  =String.Format("Displaying {0} most recent photo(s)", photos.Count);
+            }
+            catch
+            { }
         }
 
         /// <summary>
@@ -74,6 +106,11 @@ namespace WindowsPhotoViewer
         /// serializable state.</param>
         private void navigationHelper_SaveState(object sender, SaveStateEventArgs e)
         {
+            if (recentlyAccessedPhotos != null && recentlyAccessedPhotos.Any())
+            {
+                //ApplicationData.Current.LocalSettings.Values[RecentlyAccessedPhotosTokenName] = recentlyAccessedPhotos;
+                e.PageState[RecentlyAccessedPhotosTokenName] = recentlyAccessedPhotos;
+            }
         }
 
         #region NavigationHelper registration
@@ -120,6 +157,26 @@ namespace WindowsPhotoViewer
             var lstPhotos = photos as IList<Photo> ?? photos.ToList();
             ImagesGrid.ItemsSource = new LazyPhotoLoader(lstPhotos.ToList());
             selectedCount.Text = lstPhotos.Count + " photo(s) selected";
+
+            recentlyAccessedPhotos = new List<String>();
+
+            //Currently caches only the 200 most recent photos
+            foreach (var photo in lstPhotos.Take(20))
+            {
+                recentlyAccessedPhotos.Add(Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.Add(photo.StorageFile));
+            }
+        }
+
+        private void ImagesGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!e.AddedItems.Any())
+                return;
+
+            var selectedImage = e.AddedItems[e.AddedItems.Count - 1] as ImageItem;
+            if (Frame != null && selectedImage != null)
+            {
+                Frame.Navigate(typeof(PhotoPage), selectedImage);
+            }
         }
     }
 }
