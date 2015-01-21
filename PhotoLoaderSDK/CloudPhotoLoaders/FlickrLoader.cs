@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using PhotoLoader.Models;
 
-namespace PhotoLoaderSDK.PhotoLoaders
+namespace PhotoLoaderSDK.CloudPhotoLoaders
 {
     public class FlickrLoader : IPhotoRetriever
     {

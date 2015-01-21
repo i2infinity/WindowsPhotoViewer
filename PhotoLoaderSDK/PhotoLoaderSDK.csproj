@@ -113,13 +113,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IFilePicker.cs" />
-    <Compile Include="LocalStoragePhotoLoaders\LocalStorageFilePicker.cs" />
-    <Compile Include="NotImplementedPhotoLoaders\InstagramLoader.cs" />
-    <Compile Include="NotImplementedPhotoLoaders\FacebookLoader.cs" />
+    <Compile Include="LocalStoragePhotoLoader\LocalStorageFilePicker.cs" />
+    <Compile Include="CloudPhotoLoaders\InstagramLoader.cs" />
+    <Compile Include="CloudPhotoLoaders\FacebookLoader.cs" />
     <Compile Include="IPhotoRetriever.cs" />
-    <Compile Include="NotImplementedPhotoLoaders\FlickrLoader.cs" />
-    <Compile Include="LocalStoragePhotoLoaders\LocalStorageLoader.cs" />
+    <Compile Include="CloudPhotoLoaders\FlickrLoader.cs" />
+    <Compile Include="LocalStoragePhotoLoader\LocalStorageLoader.cs" />
     <Compile Include="PhotoLoader.cs" />
+    <Compile Include="PhotoLoaderFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">

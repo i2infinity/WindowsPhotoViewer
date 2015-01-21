@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using PhotoLoader.Models;
 
-namespace PhotoLoaderSDK.PhotoLoaders
+namespace PhotoLoaderSDK.CloudPhotoLoaders
 {
-    public class InstagramLoader : IPhotoRetriever
+    public class FacebookLoader : IPhotoRetriever
     {
         public Task<IEnumerable<Photo>> RetrievePhotos(int? pageSize = null)
         {

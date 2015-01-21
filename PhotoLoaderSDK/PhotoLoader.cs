@@ -2,8 +2,6 @@
 using System.Threading.Tasks;
 using PhotoLoader.Interfaces;
 using PhotoLoader.Models;
-using PhotoLoaderSDK.LocalStoragePhotoLoaders;
-using PhotoLoaderSDK.PhotoLoaders;
 
 namespace PhotoLoaderSDK
 {
@@ -18,32 +16,9 @@ namespace PhotoLoaderSDK
         /// <returns></returns>
         public async Task<IEnumerable<Photo>> RetrievePhotos(PhotoDataSource dataSource, int? pageSize = null)
         {
-            IEnumerable<Photo> results;
-
-            switch (dataSource)
-            {
-                case PhotoDataSource.LocalStorage:
-                    results = await (new LocalStorageLoader(new LocalStorageFilePicker())).RetrievePhotos(pageSize);
-                    break;
-
-                case PhotoDataSource.Facebook:
-                    results = await (new FacebookLoader()).RetrievePhotos(pageSize);
-                    break;
-
-                case PhotoDataSource.Flickr:
-                    results = await (new FlickrLoader()).RetrievePhotos(pageSize);
-                    break;
-
-                case PhotoDataSource.Instagram:
-                    results = await (new InstagramLoader()).RetrievePhotos(pageSize);
-                    break;
-
-                default:
-                    results = await (new LocalStorageLoader(new LocalStorageFilePicker())).RetrievePhotos(pageSize);
-                    break;
-            }
-
-            return results;
+            var photoLoaderFactory = new PhotoLoaderFactory();
+            var photoLoader = photoLoaderFactory.GetPhotoRetriever(dataSource);
+            return await photoLoader.RetrievePhotos(pageSize);
         }
     }
 }
