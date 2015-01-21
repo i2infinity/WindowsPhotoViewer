@@ -18,10 +18,10 @@ namespace WindowsPhotoViewer
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private readonly IRetrievePhotos photoLoader = new PhotoLoaderSDK.PhotoLoader();
+        private readonly IRetrievePhotos _photoLoader = new PhotoLoaderSDK.PhotoLoader();
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
-        private String recentlyAccessedPhotos;
+        private String _recentlyAccessedPhotos;
         private const String RecentlyAccessedPhotosTokenName = "falToken";
         private const Int32 MaxRecentAccessListCount = 20;
 
@@ -74,26 +74,28 @@ namespace WindowsPhotoViewer
                 Object value;
                 if (!ApplicationData.Current.LocalSettings.Values.TryGetValue(RecentlyAccessedPhotosTokenName, out value)) return;
 
-                recentlyAccessedPhotos = value as String;
-                if (recentlyAccessedPhotos == null || String.IsNullOrEmpty(recentlyAccessedPhotos))
+                _recentlyAccessedPhotos = value as String;
+                if (_recentlyAccessedPhotos == null || String.IsNullOrEmpty(_recentlyAccessedPhotos))
                 {
                     return;
                 }
 
                 var photos = new List<StorageFile>();
-                foreach (var accessedPhoto in recentlyAccessedPhotos.Split(','))
+                foreach (var accessedPhoto in _recentlyAccessedPhotos.Split(','))
                 {
                     try
                     {
                         var file = await Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.GetFileAsync(accessedPhoto);
                         photos.Add(file);
                     }
+                    // ReSharper disable once EmptyGeneralCatchClause
                     catch{}
                 }
 
                 ImagesGrid.ItemsSource = new LazyPhotoLoader(photos.MapToStorePhoto());
                 selectedCount.Text  =String.Format("Displaying {0} most recent photo(s)", photos.Count);
             }
+            // ReSharper disable once EmptyGeneralCatchClause
             catch
             { }
         }
@@ -108,9 +110,9 @@ namespace WindowsPhotoViewer
         /// serializable state.</param>
         private void navigationHelper_SaveState(object sender, SaveStateEventArgs e)
         {
-            if (recentlyAccessedPhotos != null && recentlyAccessedPhotos.Any())
+            if (_recentlyAccessedPhotos != null && _recentlyAccessedPhotos.Any())
             {
-                ApplicationData.Current.LocalSettings.Values[RecentlyAccessedPhotosTokenName] = recentlyAccessedPhotos;
+                ApplicationData.Current.LocalSettings.Values[RecentlyAccessedPhotosTokenName] = _recentlyAccessedPhotos;
             }
         }
 
@@ -154,17 +156,17 @@ namespace WindowsPhotoViewer
                 await dialog.ShowAsync();
             }
 
-            var photos = await photoLoader.RetrievePhotos(PhotoDataSource.LocalStorage);
+            var photos = await _photoLoader.RetrievePhotos(PhotoDataSource.LocalStorage);
             var lstPhotos = photos as IList<Photo> ?? photos.ToList();
             ImagesGrid.ItemsSource = new LazyPhotoLoader(lstPhotos.ToList());
             selectedCount.Text = lstPhotos.Count + " photo(s) selected";
 
             //Currently caches only the 200 most recent photos
-            recentlyAccessedPhotos = "";
+            _recentlyAccessedPhotos = "";
             foreach (var photo in lstPhotos.Take(MaxRecentAccessListCount))
             {
                 var token = Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.Add(photo.StorageFile);
-                recentlyAccessedPhotos += token + ",";
+                _recentlyAccessedPhotos += token + ",";
             }
         }
 
