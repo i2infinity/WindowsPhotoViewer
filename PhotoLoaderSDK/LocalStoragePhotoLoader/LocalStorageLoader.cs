@@ -33,6 +33,7 @@ namespace PhotoLoaderSDK.LocalStoragePhotoLoader
                     FileName = file.Name,
                     DateCreated = file.DateCreated.UtcDateTime,
                     DisplayName = file.DisplayName,
+                    StorageFile = file
                 }));
             }
 

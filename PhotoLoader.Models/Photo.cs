@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Devices.Geolocation;
+using Windows.Storage;
 
 namespace PhotoLoader.Models
 {
@@ -38,5 +39,10 @@ namespace PhotoLoader.Models
         /// Contains the location information of the photo if geo tagging was enabled
         /// </summary>
         public Geocoordinate Location { get; set; }
+
+        /// <summary>
+        /// Storage file representation of the images
+        /// </summary>
+        public StorageFile StorageFile { get; set; }
     }
 }
