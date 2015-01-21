@@ -21,8 +21,9 @@ namespace WindowsPhotoViewer
         private readonly IRetrievePhotos photoLoader = new PhotoLoaderSDK.PhotoLoader();
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
-        private IList<String> recentlyAccessedPhotos;
+        private String recentlyAccessedPhotos;
         private const String RecentlyAccessedPhotosTokenName = "falToken";
+        private const Int32 MaxRecentAccessListCount = 20;
 
         /// <summary>
         /// This can be changed to a strongly typed view model.
@@ -67,19 +68,20 @@ namespace WindowsPhotoViewer
         {
             try
             {
-                if (e.PageState == null || !e.PageState.ContainsKey(RecentlyAccessedPhotosTokenName)) return;
+                if (ApplicationData.Current.LocalSettings == null || !ApplicationData.Current.LocalSettings.Values.Any()
+                    || !ApplicationData.Current.LocalSettings.Values.ContainsKey(RecentlyAccessedPhotosTokenName)) return;
 
                 Object value;
-                if (!e.PageState.TryGetValue(RecentlyAccessedPhotosTokenName, out value)) return;
+                if (!ApplicationData.Current.LocalSettings.Values.TryGetValue(RecentlyAccessedPhotosTokenName, out value)) return;
 
-                recentlyAccessedPhotos = value as List<String>;
-                if (recentlyAccessedPhotos == null)
+                recentlyAccessedPhotos = value as String;
+                if (recentlyAccessedPhotos == null || String.IsNullOrEmpty(recentlyAccessedPhotos))
                 {
                     return;
                 }
 
                 var photos = new List<StorageFile>();
-                foreach (var accessedPhoto in recentlyAccessedPhotos)
+                foreach (var accessedPhoto in recentlyAccessedPhotos.Split(','))
                 {
                     try
                     {
@@ -108,8 +110,7 @@ namespace WindowsPhotoViewer
         {
             if (recentlyAccessedPhotos != null && recentlyAccessedPhotos.Any())
             {
-                //ApplicationData.Current.LocalSettings.Values[RecentlyAccessedPhotosTokenName] = recentlyAccessedPhotos;
-                e.PageState[RecentlyAccessedPhotosTokenName] = recentlyAccessedPhotos;
+                ApplicationData.Current.LocalSettings.Values[RecentlyAccessedPhotosTokenName] = recentlyAccessedPhotos;
             }
         }
 
@@ -158,12 +159,12 @@ namespace WindowsPhotoViewer
             ImagesGrid.ItemsSource = new LazyPhotoLoader(lstPhotos.ToList());
             selectedCount.Text = lstPhotos.Count + " photo(s) selected";
 
-            recentlyAccessedPhotos = new List<String>();
-
             //Currently caches only the 200 most recent photos
-            foreach (var photo in lstPhotos.Take(20))
+            recentlyAccessedPhotos = "";
+            foreach (var photo in lstPhotos.Take(MaxRecentAccessListCount))
             {
-                recentlyAccessedPhotos.Add(Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.Add(photo.StorageFile));
+                var token = Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.Add(photo.StorageFile);
+                recentlyAccessedPhotos += token + ",";
             }
         }
 
