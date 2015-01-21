@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoLoader.Interfaces", "P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoLoaderSDK.Tests", "PhotoLoaderSDK.Tests\PhotoLoaderSDK.Tests.csproj", "{AEFC71E3-5148-47FC-B1D6-8FEDC1436B29}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SDKPhotoLoader", "SDKPhotoLoader", "{FAD1314D-72F2-4A75-9DDB-B81277093DE8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -98,5 +100,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8E2626E1-AB77-455C-84C5-87FC0B362EDA} = {FAD1314D-72F2-4A75-9DDB-B81277093DE8}
+		{46BE4FB8-5F35-4DF1-AB5A-57E59E7889F0} = {FAD1314D-72F2-4A75-9DDB-B81277093DE8}
+		{B93AFB60-FBFE-491C-9728-8AAD702404EC} = {FAD1314D-72F2-4A75-9DDB-B81277093DE8}
+		{AEFC71E3-5148-47FC-B1D6-8FEDC1436B29} = {FAD1314D-72F2-4A75-9DDB-B81277093DE8}
 	EndGlobalSection
 EndGlobal
