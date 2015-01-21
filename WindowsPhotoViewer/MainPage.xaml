@@ -48,10 +48,10 @@
         </Grid>
         <Grid x:Name="contentGrid" Margin="120,0,0,120" Grid.Row="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
+                <RowDefinition Height="70"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <StackPanel x:Name="headerPanel" Grid.Row="0" Orientation="Horizontal">
+            <StackPanel x:Name="headerPanel" Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,20">
                 <TextBlock TextWrapping="Wrap" Text="Load photos from" Style="{StaticResource SubheaderTextBlockStyle}" Margin="0,0,20,0"/>
                 <ComboBox x:Name="CmbDataSources" Width="240" Margin="0,0,20,0" SelectedIndex="0">
                     <x:String>Device Storage</x:String>
