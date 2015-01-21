@@ -10,6 +10,12 @@ System Requirements
 * Visual Studio 2013 with Update 5
 * Windows 8.1
 
+Instructions
+----------------------
+* Open PhotoLoaderSDK.sln in Visual Studio 2013 (Update 5) or Higher
+* Right click "WindowsPhotoViewer.csproj" and select "Set as StartUp project"
+* Hit F5 or Cntrl + F5 to launch the solution
+
 Description
 ----------------------
 
