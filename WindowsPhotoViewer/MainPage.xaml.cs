@@ -110,10 +110,7 @@ namespace WindowsPhotoViewer
         /// serializable state.</param>
         private void navigationHelper_SaveState(object sender, SaveStateEventArgs e)
         {
-            if (_recentlyAccessedPhotos != null && _recentlyAccessedPhotos.Any())
-            {
-                ApplicationData.Current.LocalSettings.Values[RecentlyAccessedPhotosTokenName] = _recentlyAccessedPhotos;
-            }
+
         }
 
         #region NavigationHelper registration
@@ -167,6 +164,11 @@ namespace WindowsPhotoViewer
             {
                 var token = Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.Add(photo.StorageFile);
                 _recentlyAccessedPhotos += token + ",";
+            }
+
+            if (!String.IsNullOrWhiteSpace(_recentlyAccessedPhotos))
+            {
+                ApplicationData.Current.LocalSettings.Values[RecentlyAccessedPhotosTokenName] = _recentlyAccessedPhotos;
             }
         }
 

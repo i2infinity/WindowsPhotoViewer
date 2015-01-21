@@ -1,4 +1,9 @@
-﻿using WindowsPhotoViewer.Common;
+﻿using System.Threading.Tasks;
+using Windows.Storage;
+using Windows.Storage.FileProperties;
+using Windows.Storage.Streams;
+using Windows.UI.Xaml.Media.Imaging;
+using WindowsPhotoViewer.Common;
 using System;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -80,9 +85,31 @@ namespace WindowsPhotoViewer
         /// The navigation parameter is available in the LoadState method 
         /// in addition to page state preserved during an earlier session.
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedTo(e);
+
+            var image = e.Parameter as ImageItem;
+            if (image == null)
+            {
+                return;
+            }
+
+            var bmpImage = await LoadImage(image.StorageFile);
+            DisplayImage.Source = bmpImage;
+            DataContext = image;
+        }
+
+        private static async Task<BitmapImage> LoadImage(StorageFile file)
+        {
+            var bitmapImage = new BitmapImage();
+            var stream = (FileRandomAccessStream)await file.OpenAsync(FileAccessMode.Read);
+
+            bitmapImage.DecodePixelHeight = 450;
+            bitmapImage.SetSource(stream);
+
+            return bitmapImage;
+
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)

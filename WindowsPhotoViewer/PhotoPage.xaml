@@ -50,25 +50,16 @@
                 <RowDefinition Height="70"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" TextWrapping="Wrap" Text="TextBlock" Style="{StaticResource SubheaderTextBlockStyle}"/>
-            <StackPanel x:Name="imagePanel" Grid.Row="1" Orientation="Horizontal">
-                <Border BorderBrush="Gray" BorderThickness="1" Background="Gray">
-                    <Image x:Name="displayImage" Source="Assets/Logo.png"/>
-                </Border>
-                <StackPanel Margin="20,0,0,0">
-                    <TextBlock TextWrapping="Wrap" Text="File name:" 
-                               Style="{ThemeResource CaptionTextBlockStyle}"/>
-                    <TextBlock TextWrapping="Wrap" Text="{Binding Name}" 
-                               Style="{ThemeResource BodyTextBlockStyle}" Margin="10,0,0,30"/>
-                    <TextBlock TextWrapping="Wrap" Text="Path:" 
-                               Style="{ThemeResource CaptionTextBlockStyle}"/>
-                    <TextBlock TextWrapping="Wrap" Text="{Binding Path}" 
-                               Style="{ThemeResource BodyTextBlockStyle}" Margin="10,0,0,30"/>
-                    <TextBlock TextWrapping="Wrap" Text="Date created:" 
-                               Style="{ThemeResource CaptionTextBlockStyle}"/>
-                    <TextBlock TextWrapping="Wrap" Text="{Binding DateCreated.Date}" 
-                               Style="{ThemeResource BodyTextBlockStyle}" Margin="10,0,0,30"/>
+            <StackPanel Grid.Row="1" Orientation="Vertical">
+                <StackPanel Margin="5,0,0,0" Orientation="Horizontal">
+                    <TextBlock TextWrapping="Wrap" Text="File name:" Style="{ThemeResource CaptionTextBlockStyle}"  Margin="0,0,15,0"/>
+                    <TextBlock TextWrapping="Wrap" Text="{Binding FileName}" Style="{ThemeResource BodyTextBlockStyle}"/>
                 </StackPanel>
+                <StackPanel Margin="5,0,0,0" Orientation="Horizontal">
+                    <TextBlock TextWrapping="Wrap" Text="Path:" Style="{ThemeResource CaptionTextBlockStyle}" Margin="0,0,15,0"/>
+                    <TextBlock TextWrapping="Wrap" Text="{Binding FilePath}" Style="{ThemeResource BodyTextBlockStyle}"/>
+                </StackPanel>
+                <Image x:Name="DisplayImage" Width="650" Height="450"/>
             </StackPanel>
         </Grid>
     </Grid>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media.Imaging;
 
@@ -17,5 +18,7 @@ namespace WindowsPhotoViewer
         public String FileName { get; set; }
 
         public String FilePath { get; set; }
+
+        public StorageFile StorageFile { get; set; }
     }
 }

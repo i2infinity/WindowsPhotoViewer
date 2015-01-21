@@ -59,6 +59,7 @@ namespace WindowsPhotoViewer
                     FileName = storePhoto.FileName,
                     FilePath = storePhoto.FilePath,
                     ImageSource = bitmapImage,
+                    StorageFile = storePhoto.StorageFile
                 };
                 
                 result.Add(imageItem);
