@@ -19,7 +19,7 @@ namespace WindowsPhotoViewer
         {
             _selectedPhotos = allPhotos;
             _actualCount = 0;
-            _defaultPageSize = 40;
+            _defaultPageSize = 10;
             HasMoreItems = allPhotos.Any();
         }
 
