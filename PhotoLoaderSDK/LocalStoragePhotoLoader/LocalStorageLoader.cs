@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
@@ -15,7 +16,7 @@ namespace PhotoLoaderSDK.LocalStoragePhotoLoader
             this._filePicker = filePicker;
         }
 
-        public async Task<IEnumerable<Photo>> RetrievePhotos(int? pageSize = null)
+        public async Task<IEnumerable<Photo>> RetrievePhotos(IEnumerable<KeyValuePair<String, Object>> filters = null)
         {
             var results = new List<Photo>();
             _filePicker.AddFilter(".jpg");

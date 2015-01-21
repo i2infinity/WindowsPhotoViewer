@@ -11,8 +11,8 @@ namespace PhotoLoader.Interfaces
         /// Returns the user's selection of photos
         /// </summary>
         /// <param name="dataSource">The location/source from which the photos will be selected</param>
-        /// <param name="pageSize">Total number of photos to return. (pass null to avoid pagination)</param>
+        /// <param name="filters">Filters to use while retrieving the photos</param>
         /// <returns></returns>
-        Task<IEnumerable<Photo>> RetrievePhotos(PhotoDataSource dataSource, Int32? pageSize = null);
+        Task<IEnumerable<Photo>> RetrievePhotos(PhotoDataSource dataSource, IEnumerable<KeyValuePair<String, Object>> filters = null);
     }
 }

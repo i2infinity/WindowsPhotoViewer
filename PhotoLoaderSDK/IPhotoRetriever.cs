@@ -10,8 +10,8 @@ namespace PhotoLoaderSDK
         /// <summary>
         /// Returns the user's selection of photos
         /// </summary>
-        /// <param name="pageSize">Total number of photos to return. (pass null to avoid pagination)</param>
+        /// <param name="filters">Filters to use while retrieving the photos</param>
         /// <returns></returns>
-        Task<IEnumerable<Photo>> RetrievePhotos(Int32? pageSize = null);
+        Task<IEnumerable<Photo>> RetrievePhotos(IEnumerable<KeyValuePair<String, Object>> filters = null);
     }
 }

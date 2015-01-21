@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using PhotoLoader.Interfaces;
 using PhotoLoader.Models;
@@ -12,13 +13,13 @@ namespace PhotoLoaderSDK
         /// Note : Currently only PhotoDataSource.LocalStorage is supported
         /// </summary>
         /// <param name="dataSource"></param>
-        /// <param name="pageSize"></param>
+        /// <param name="filters">Filters to use while retrieving the photos</param>
         /// <returns></returns>
-        public async Task<IEnumerable<Photo>> RetrievePhotos(PhotoDataSource dataSource, int? pageSize = null)
+        public async Task<IEnumerable<Photo>> RetrievePhotos(PhotoDataSource dataSource, IEnumerable<KeyValuePair<String, Object>> filters = null)
         {
             var photoLoaderFactory = new PhotoLoaderFactory();
             var photoLoader = photoLoaderFactory.GetPhotoRetriever(dataSource);
-            return await photoLoader.RetrievePhotos(pageSize);
+            return await photoLoader.RetrievePhotos(filters);
         }
     }
 }
