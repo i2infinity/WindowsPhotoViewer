@@ -17,6 +17,7 @@ namespace PhotoLoaderSDK.Tests
         [TestMethod]
         public void RetrievePhotosHappyPath()
         {
+            Assert.IsTrue(true);
             //Arrange
 
             //Act
